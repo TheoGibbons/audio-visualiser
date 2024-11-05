@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Visualise Audio Demo</title>
+    <link rel="stylesheet" href="audio-visualiser.css">
+</head>
+<body>
+
+<button id="start-recording">Start recording</button>
+<button id="stop-recording" style="display:none;">Stop recording</button>
+
+<select onchange="window.location = '?' + this.value">
+    <option value=""></option>
+    <option value="bar">Bar</option>
+    <option value="border">Border</option>
+    <option value="bezier">bezier</option>
+    <option value="bezier2">bezier2</option>
+</select>
+
+<canvas id="visualiser" style="display: none"></canvas>
+
+<script src="audio-visualiser.js"></script>
+<script src="audio-visualiser-visuals.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+
+    // Get your canvas element by any selector
+    const myCanvas = document.getElementById('visualiser');
+
+    // Initialize the visualizer with your canvas
+    AudioVisualiser.init({
+      canvas: myCanvas,
+      theme: document.location.search.replace('?', '')
+    });
+
+    const startButton = document.getElementById('start-recording');
+    const stopButton = document.getElementById('stop-recording');
+
+    startButton.addEventListener('click', () => {
+      AudioVisualiser.visualiseAudio(true);
+    });
+    stopButton.addEventListener('click', () => {
+      AudioVisualiser.visualiseAudio(false)
+    });
+
+    startButton.addEventListener('click', () => {
+      stopButton.style.display = '';
+      startButton.style.display = 'none';
+    });
+    stopButton.addEventListener('click', () => {
+      startButton.style.display = '';
+      stopButton.style.display = 'none';
+    });
+
+
+  });
+</script>
+</body>
+</html>
