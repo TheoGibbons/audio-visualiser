@@ -28,7 +28,7 @@ To use the Audio Visualiser, include the following files in your HTML:
 
 ## Demo
 
-A demo is provided in the [index.html](https://theogibbons.github.io/js-zoomer/demo-simple.html) file. You can open this file in your browser to see the Audio Visualiser in action.
+A demo is provided in the [demo.html](https://theogibbons.github.io/audio-visualiser/demo.html) file. You can open this file in your browser to see the Audio Visualiser in action.
 
 ### Example
 
