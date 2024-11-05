@@ -162,7 +162,7 @@ const AudioVisualiserVisualsBezier2 = (function () {
       canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
       canvasCtx.beginPath();
 
-      let prev = height
+      let prevY = height
 
       for (let i = 0; i < bufferLength; i++) {
         const v = dataArray[i] / 128.0;
@@ -172,14 +172,13 @@ const AudioVisualiserVisualsBezier2 = (function () {
           canvasCtx.moveTo(x, y);
         } else {
           const cp1x = x - sliceWidth / 2;
-          const cp1y = prev;
+          const cp1y = prevY;
           const cp2x = x - sliceWidth / 2;
           const cp2y = y;
           canvasCtx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
-
-          prev = y;
         }
 
+        prevY = y;
         x += sliceWidth;
       }
 
