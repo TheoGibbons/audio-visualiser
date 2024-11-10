@@ -43,6 +43,8 @@ const AudioVisualiser = (function () {
       AudioVisualiserVisualsCircle2.draw(canvas, canvasCtx, bufferLength, dataArray);
     } else if (theme === 'circle3') {
       AudioVisualiserVisualsCircle3.draw(canvas, canvasCtx, bufferLength, dataArray);
+    } else if (theme === 'circle4') {
+      AudioVisualiserVisualsCircle4.draw(canvas, canvasCtx, bufferLength, dataArray);
     } else {
       AudioVisualiserVisualsBars.draw(canvas, canvasCtx, bufferLength, dataArray);
     }
