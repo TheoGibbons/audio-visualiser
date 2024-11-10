@@ -37,6 +37,12 @@ const AudioVisualiser = (function () {
       AudioVisualiserVisualsBezier.draw(canvas, canvasCtx, bufferLength, dataArray);
     } else if (theme === 'bezier2') {
       AudioVisualiserVisualsBezier2.draw(canvas, canvasCtx, bufferLength, dataArray);
+    } else if (theme === 'circle') {
+      AudioVisualiserVisualsCircle.draw(canvas, canvasCtx, bufferLength, dataArray);
+    } else if (theme === 'circle2') {
+      AudioVisualiserVisualsCircle2.draw(canvas, canvasCtx, bufferLength, dataArray);
+    } else if (theme === 'circle3') {
+      AudioVisualiserVisualsCircle3.draw(canvas, canvasCtx, bufferLength, dataArray);
     } else {
       AudioVisualiserVisualsBars.draw(canvas, canvasCtx, bufferLength, dataArray);
     }

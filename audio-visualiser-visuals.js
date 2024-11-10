@@ -124,7 +124,7 @@ const AudioVisualiserVisualsBezier = (function () {
       canvasCtx.beginPath();
 
       for (let i = 0; i < bufferLength; i++) {
-        const v = dataArray[i] / 128.0;
+        const v = dataArray[i] / segments;
         const y = height - (v * height / 2);
 
         if (i === 0) {
@@ -165,7 +165,7 @@ const AudioVisualiserVisualsBezier2 = (function () {
       let prevY = height
 
       for (let i = 0; i < bufferLength; i++) {
-        const v = dataArray[i] / 128.0;
+        const v = dataArray[i] / segments;
         const y = height - (v * height / 2);
 
         if (i === 0) {
@@ -184,6 +184,183 @@ const AudioVisualiserVisualsBezier2 = (function () {
 
       canvasCtx.lineTo(canvas.width, canvas.height);
       canvasCtx.stroke();
+    },
+
+  };
+})();
+
+
+const AudioVisualiserVisualsCircle = (function () {
+
+  return {
+
+    draw: function (canvas, canvasCtx, bufferLength, dataArray) {
+      const width = canvas.width;
+      const height = canvas.height;
+
+      canvasCtx.lineWidth = 2;
+      canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+      canvasCtx.beginPath();
+
+      const mapOntoRange = (value, inMin, inMax, outMin, outMax) => {
+        return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+      }
+
+      const getPoints = (dataArray, radiusMin, radiusMax, centerX, centerY, segments) => {
+        const points = [];
+
+        for (let i = 0; i < segments * 2; i++) {
+
+          const valueI = i > segments ? segments - (i - segments) : i;
+          const value = dataArray[valueI];
+          const radius = mapOntoRange(value / segments, 0, 1, radiusMin, radiusMax);
+
+          points.push({
+            x: centerX + (Math.sin(2 * Math.PI / (segments * 2) * i) * radius),
+            y: centerY + (Math.cos(2 * Math.PI / (segments * 2) * i) * radius)
+          });
+        }
+
+        // Draw the line back to the first point
+        points.push(points[0]);
+
+        return points;
+      }
+
+      const points = getPoints(dataArray, 100, 300, width / 2, height / 2, bufferLength);
+
+      for (let i = 0; i < points.length; i++) {
+        const point = points[i];
+        if (i === 0) {
+          canvasCtx.moveTo(point.x, point.y);
+        } else {
+          canvasCtx.lineTo(point.x, point.y);
+        }
+      }
+
+      canvasCtx.stroke();
+    },
+
+  };
+})();
+
+
+const AudioVisualiserVisualsCircle2 = (function () {
+
+  let drawCount = 0;
+
+  return {
+
+    draw: function (canvas, canvasCtx, bufferLength, dataArray) {
+      const width = canvas.width;
+      const height = canvas.height;
+
+      canvasCtx.lineWidth = 2;
+      canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+      canvasCtx.beginPath();
+
+      const mapOntoRange = (value, inMin, inMax, outMin, outMax) => {
+        return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+      }
+
+      const getPoints = (dataArray, radiusMin, radiusMax, centerX, centerY, segments) => {
+        const points = [];
+
+        for (let i = 0; i < segments * 2; i++) {
+
+          let valueI = i > segments ? segments - (i - segments) : i;
+          valueI = (valueI + drawCount) % segments;
+          const value = dataArray[valueI];
+          const radius = mapOntoRange(value / segments, 0, 1, radiusMin, radiusMax);
+
+          points.push({
+            x: centerX + (Math.sin(2 * Math.PI / (segments * 2) * i) * radius),
+            y: centerY + (Math.cos(2 * Math.PI / (segments * 2) * i) * radius)
+          });
+        }
+
+        // Draw the line back to the first point
+        points.push(points[0]);
+
+        return points;
+      }
+
+      const points = getPoints(dataArray, 100, 300, width / 2, height / 2, bufferLength);
+
+      for (let i = 0; i < points.length; i++) {
+        const point = points[i];
+        if (i === 0) {
+          canvasCtx.moveTo(point.x, point.y);
+        } else {
+          canvasCtx.lineTo(point.x, point.y);
+        }
+      }
+
+      canvasCtx.stroke();
+
+      drawCount++;
+    },
+
+  };
+})();
+
+
+const AudioVisualiserVisualsCircle3 = (function () {
+
+  let startTime = Date.now();
+  let spinSpeed = 1.0;
+
+  return {
+
+    draw: function (canvas, canvasCtx, bufferLength, dataArray) {
+      const width = canvas.width;
+      const height = canvas.height;
+      const segments = bufferLength;
+
+      canvasCtx.lineWidth = 2;
+      canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+      canvasCtx.beginPath();
+
+      const mapOntoRange = (value, inMin, inMax, outMin, outMax) => {
+        return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+      }
+
+      const getPoints = (dataArray, radiusMin, radiusMax, centerX, centerY, segments) => {
+        const points = [];
+
+        for (let i = 0; i < segments * 2; i++) {
+
+          let valueI = i > segments ? segments - (i - segments) : i;
+          const value = dataArray[valueI];
+          const radius = mapOntoRange(value / segments, 0, 1, radiusMin, radiusMax);
+
+          let spinIncrement = (((Date.now() - startTime + 1) / 1000) * spinSpeed) % (2 * Math.PI);
+
+          points.push({
+            x: centerX + (Math.sin(2 * Math.PI / (segments * 2) * i + spinIncrement) * radius),
+            y: centerY + (Math.cos(2 * Math.PI / (segments * 2) * i + spinIncrement) * radius)
+          });
+        }
+
+        // Draw the line back to the first point
+        points.push(points[0]);
+
+        return points;
+      }
+
+      const points = getPoints(dataArray, 100, 300, width / 2, height / 2, segments);
+
+      for (let i = 0; i < points.length; i++) {
+        const point = points[i];
+        if (i === 0) {
+          canvasCtx.moveTo(point.x, point.y);
+        } else {
+          canvasCtx.lineTo(point.x, point.y);
+        }
+      }
+
+      canvasCtx.stroke();
+
     },
 
   };
