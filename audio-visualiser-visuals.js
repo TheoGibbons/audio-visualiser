@@ -395,7 +395,7 @@ const AudioVisualiserVisualsCircle4 = (function () {
           let valueI = i > segments ? segments - (i - segments) : i;
           const value = dataArray[valueI];
           const radius = mapOntoRange(value / segments, 0, 1, radiusMin, radiusMax);
-          const radius2 = mapOntoRange(value / segments, 0, 1, radiusMin, (radiusMax-radiusMin)*.75+radiusMin);
+          const radius2 = mapOntoRange(value / segments, 0, 1, radiusMin, (radiusMax - radiusMin) * .75 + radiusMin);
 
           let spinIncrement = (((Date.now() - startTime + 1) / 1000) * spinSpeed) % (2 * Math.PI);
 
@@ -417,10 +417,24 @@ const AudioVisualiserVisualsCircle4 = (function () {
         return [points1, points2];
       }
 
+      const getSecondLineColour = (canvasCtx, width, height) => {
+        // return '#aaa';
+        // return '#00f9ff';
+
+        // Create gradient
+        const gradient = canvasCtx.createLinearGradient(0, 0, width, height);
+        gradient.addColorStop("0", "#ffafff");
+        gradient.addColorStop("0.4", "#a9ffcc");
+        gradient.addColorStop("0.5", "#00f9ff");
+        gradient.addColorStop("0.6", "#ffa9c0");
+        gradient.addColorStop("1.0", "#ffb1b1");
+        return gradient;
+      }
+
       const points = getPoints(dataArray, 100, 300, width / 2, height / 2, segments);
 
-      // Change color to blue
-      canvasCtx.strokeStyle = '#aaa';
+      canvasCtx.strokeStyle = getSecondLineColour(canvasCtx, width, height);
+
       for (let i = 0; i < points[1].length; i++) {
         const point = points[1][i];
         if (i === 0) {
