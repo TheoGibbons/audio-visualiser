@@ -370,16 +370,17 @@ const AudioVisualiserVisualsCircle3 = (function () {
 const AudioVisualiserVisualsCircle4 = (function () {
 
   let startTime = Date.now();
-  let spinSpeed = 1.0;
 
   return {
 
-    draw: function (canvas, canvasCtx, bufferLength, dataArray) {
+    draw: function (canvas, canvasCtx, bufferLength, dataArray, options) {
       const width = canvas.width;
       const height = canvas.height;
       const segments = bufferLength;
+      const spinSpeed = options?.spinSpeed || 1.0;
+      const radiusModifier = options?.radiusModifier || 0.75;
 
-      canvasCtx.lineWidth = 2;
+      canvasCtx.lineWidth = options?.lineWidth || 2;
       canvasCtx.beginPath();
 
       const mapOntoRange = (value, inMin, inMax, outMin, outMax) => {
@@ -395,7 +396,7 @@ const AudioVisualiserVisualsCircle4 = (function () {
           let valueI = i > segments ? segments - (i - segments) : i;
           const value = dataArray[valueI];
           const radius = mapOntoRange(value / segments, 0, 1, radiusMin, radiusMax);
-          const radius2 = mapOntoRange(value / segments, 0, 1, radiusMin, (radiusMax - radiusMin) * .75 + radiusMin);
+          const radius2 = mapOntoRange(value / segments, 0, 1, radiusMin, (radiusMax - radiusMin) * radiusModifier + radiusMin);
 
           let spinIncrement = (((Date.now() - startTime + 1) / 1000) * spinSpeed) % (2 * Math.PI);
 
@@ -417,7 +418,11 @@ const AudioVisualiserVisualsCircle4 = (function () {
         return [points1, points2];
       }
 
-      const getSecondLineColour = (canvasCtx, width, height) => {
+      const getPrimaryLineColour = options?.getPrimaryLineColour || ((canvasCtx, width, height) => {
+        return 'rgb(0, 0, 0)';
+      })
+
+      const getSecondLineColour = options?.getSecondLineColour || ((canvasCtx, width, height) => {
         // return '#aaa';
         // return '#00f9ff';
 
@@ -429,9 +434,16 @@ const AudioVisualiserVisualsCircle4 = (function () {
         gradient.addColorStop("0.6", "#ffa9c0");
         gradient.addColorStop("1.0", "#ffb1b1");
         return gradient;
-      }
+      })
 
-      const points = getPoints(dataArray, 100, 300, width / 2, height / 2, segments);
+      const points = getPoints(
+        dataArray,
+        options?.radiusMin || 100,
+        options?.radiusMax || 300,
+        options?.getCenterX ? options?.getCenterX(width) : width / 2,
+        options?.getCenterY ? options?.getCenterX(height) : height / 2,
+        segments
+      );
 
       canvasCtx.strokeStyle = getSecondLineColour(canvasCtx, width, height);
 
@@ -445,7 +457,7 @@ const AudioVisualiserVisualsCircle4 = (function () {
       }
 
       canvasCtx.stroke();
-      canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+      canvasCtx.strokeStyle = getPrimaryLineColour(canvasCtx, width, height);
       canvasCtx.beginPath();
 
       for (let i = 0; i < points[0].length; i++) {

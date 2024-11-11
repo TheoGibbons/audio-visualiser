@@ -61,6 +61,7 @@ Here is an example of how to set up the Audio Visualiser in your HTML file:
         // theme: 'circle2'
         // theme: 'circle3'
         // theme: 'circle4'
+        // theme: 'circle4withOptions'
     });
     
     // Call visualiseAudio to start/stop

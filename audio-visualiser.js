@@ -45,6 +45,18 @@ const AudioVisualiser = (function () {
       AudioVisualiserVisualsCircle3.draw(canvas, canvasCtx, bufferLength, dataArray);
     } else if (theme === 'circle4') {
       AudioVisualiserVisualsCircle4.draw(canvas, canvasCtx, bufferLength, dataArray);
+    } else if (theme === 'circle4withOptions') {
+      AudioVisualiserVisualsCircle4.draw(canvas, canvasCtx, bufferLength, dataArray, {
+        spinSpeed: 0.1,
+        radiusModifier: 0.5,
+        lineWidth: 3,
+        getPrimaryLineColour: () => 'rgb(255, 0, 0)',
+        getSecondLineColour: () => 'rgb(0, 255, 0)',
+        radiusMin: 50,
+        radiusMax: 400,
+        getCenterX: (width) => width * 0.2,
+        getCenterY: (height) => height * 0.2,
+      });
     } else {
       AudioVisualiserVisualsBars.draw(canvas, canvasCtx, bufferLength, dataArray);
     }
