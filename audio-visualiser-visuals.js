@@ -124,7 +124,7 @@ const AudioVisualiserVisualsBezier = (function () {
       canvasCtx.beginPath();
 
       for (let i = 0; i < bufferLength; i++) {
-        const v = dataArray[i] / segments;
+        const v = dataArray[i] / bufferLength;
         const y = height - (v * height / 2);
 
         if (i === 0) {
@@ -165,7 +165,7 @@ const AudioVisualiserVisualsBezier2 = (function () {
       let prevY = height
 
       for (let i = 0; i < bufferLength; i++) {
-        const v = dataArray[i] / segments;
+        const v = dataArray[i] / bufferLength;
         const y = height - (v * height / 2);
 
         if (i === 0) {
