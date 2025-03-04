@@ -12,7 +12,6 @@ const AudioVisualiserVisualsBars = (function () {
         const dataStrength = dataArray[i];    // Number between 0 and 255
 
         barHeight = canvas.height / 255 * dataStrength;
-        console.log(dataArray[i]);
 
         let r, g, b;
         if (options?.coloriser) {
