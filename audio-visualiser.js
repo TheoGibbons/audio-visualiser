@@ -33,6 +33,16 @@ const AudioVisualiser = (function () {
 
     if (theme === 'border') {
       AudioVisualiserVisualsBorderGradient.draw(canvas, canvasCtx, bufferLength, dataArray);
+    } else if (theme === 'bar2WithOptions') {
+      AudioVisualiserVisualsBars.draw(canvas, canvasCtx, bufferLength, dataArray, {
+        coloriser: function (barHeight) {
+          return [
+            barHeight + 25,       // r
+            50,                   // g
+            255 - barHeight       // b
+          ];
+        }
+      });
     } else if (theme === 'bezier') {
       AudioVisualiserVisualsBezier.draw(canvas, canvasCtx, bufferLength, dataArray);
     } else if (theme === 'bezier2') {

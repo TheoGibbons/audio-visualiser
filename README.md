@@ -54,6 +54,7 @@ Here is an example of how to set up the Audio Visualiser in your HTML file:
     AudioVisualiser.init({
         canvas: document.getElementById('visualiser'),
         theme: 'bar'        // DEFAULT
+        // theme: 'bar2WithOptions'
         // theme: 'border'
         // theme: 'bezier'
         // theme: 'bezier2'

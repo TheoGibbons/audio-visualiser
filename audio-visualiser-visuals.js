@@ -2,18 +2,29 @@ const AudioVisualiserVisualsBars = (function () {
 
   return {
 
-    draw: function (canvas, canvasCtx, bufferLength, dataArray) {
+    draw: function (canvas, canvasCtx, bufferLength, dataArray, options) {
       const barWidth = (canvas.width / bufferLength) * 1.0;
       let barHeight;
       let x = 0;
 
       // Draw the bars
       for (let i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i] * 2.4;
+        const dataStrength = dataArray[i];    // Number between 0 and 255
 
-        const r = barHeight + 25;
-        const g = 50;
-        const b = 255 - barHeight;
+        barHeight = canvas.height / 255 * dataStrength;
+        console.log(dataArray[i]);
+
+        let r, g, b;
+        if (options?.coloriser) {
+          [r, g, b] = options.coloriser(barHeight);
+        } else {
+          const barGreyColorMin = 230
+          const barGreyColorMax = 100
+          let barGreyColor = (((barGreyColorMax - barGreyColorMin) / 255) * dataStrength) + barGreyColorMin
+          r = barGreyColor;
+          g = r;
+          b = r;
+        }
 
         canvasCtx.fillStyle = `rgb(${r},${g},${b})`;
         canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
@@ -147,7 +158,6 @@ const AudioVisualiserVisualsBezier = (function () {
   };
 })();
 
-
 const AudioVisualiserVisualsBezier2 = (function () {
 
   return {
@@ -188,7 +198,6 @@ const AudioVisualiserVisualsBezier2 = (function () {
 
   };
 })();
-
 
 const AudioVisualiserVisualsCircle = (function () {
 
@@ -243,7 +252,6 @@ const AudioVisualiserVisualsCircle = (function () {
 
   };
 })();
-
 
 const AudioVisualiserVisualsCircle2 = (function () {
 
@@ -303,7 +311,6 @@ const AudioVisualiserVisualsCircle2 = (function () {
 
   };
 })();
-
 
 const AudioVisualiserVisualsCircle3 = (function () {
 
@@ -365,7 +372,6 @@ const AudioVisualiserVisualsCircle3 = (function () {
 
   };
 })();
-
 
 const AudioVisualiserVisualsCircle4 = (function () {
 
